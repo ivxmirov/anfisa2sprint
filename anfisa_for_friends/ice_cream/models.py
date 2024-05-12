@@ -1,11 +1,13 @@
-from django.db import models
-
 from core.models import PublishedModel
+from django.db import models
 
 
 class Category(PublishedModel):
     slug = models.SlugField('Слаг', max_length=64, unique=True)
-    output_order = models.PositiveSmallIntegerField('Порядок отображения', default=100)
+    output_order = models.PositiveSmallIntegerField(
+        'Порядок отображения',
+        default=100
+        )
 
     class Meta:
         verbose_name = 'категория'
@@ -44,6 +46,11 @@ class Wrapper(PublishedModel):
 class IceCream(PublishedModel):
     is_on_main = models.BooleanField('На главную', default=False)
     description = models.TextField('Описание')
+    output_order = models.PositiveSmallIntegerField(
+        'Порядок отображения',
+        default=100
+    )
+    price = models.DecimalField(max_digits=5, decimal_places=2)
     wrapper = models.OneToOneField(
         Wrapper,
         on_delete=models.SET_NULL,
@@ -63,6 +70,7 @@ class IceCream(PublishedModel):
     class Meta:
         verbose_name = 'мороженое'
         verbose_name_plural = 'Мороженое'
+        ordering = ('output_order', 'title')
 
     def __str__(self):
         return self.title
